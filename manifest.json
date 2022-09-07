@@ -1,0 +1,12 @@
+{
+    "name": "Getting HTML Element",
+    "description": "Get HTML Element",
+    "version": "1.0",
+    "manifest_version": 3,
+    "action": {
+      "default_icon": "images/get_started16.png",
+      "default_popup": "popup.html"
+    },
+    "permissions": ["activeTab", "scripting"]
+
+  }
