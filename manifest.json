@@ -7,6 +7,12 @@
       "default_icon": "images/get_started16.png",
       "default_popup": "popup.html"
     },
-    "permissions": ["activeTab", "scripting"]
-
+    "permissions": ["activeTab", "scripting"],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_scripts": [{
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["cscript.js"]
+    }]
   }

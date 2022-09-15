@@ -1,17 +1,23 @@
-document.addEventListener('DOMContentLoaded', () => {
+chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+  chrome.tabs.sendMessage(tabs[0].id, {message: "test"}, function(response) {
+    document.getElementById('dialog-box').innerHTML = response.resp
+  });
+});
+
+/*document.addEventListener('DOMContentLoaded', () => {
   const dialogBox = document.getElementById('dialog-box');;
   const query = { active: true, currentWindow: true };
 
   chrome.tabs.query(query, (tabs) => {
-      dialogBox.innerHTML = document.documentElement;
+      dialogBox.innerHTML = document.querySelectorAll('svg');
   });
-});
-/*(async () => {
-  const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
-  let result;
-    [{result}] = await chrome.scripting.executeScript({
-      target: {tabId: tab.id},
-      func: () => document.documentElement,
-    });
-  document.body.textContent = result;
-});*/
+})*/
+
+/*chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    document.getElementById('dialog-box').innerHTML = request.message?.item(0)
+    //document.getElementById('dialog-box').innerHTML = "hi"
+    //document.getElementById('dialog-box').innerHTML = request.message
+    //console.log(request.message)
+  }
+);*/
