@@ -11,9 +11,9 @@ console.log(svgs)
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
       if (request.message === "test") {
-        //console.log(Array.from(svgs)[0].outerHTML)
-        //sendResponse({resp: Array.from(svgs)})
-        sendResponse({resp: svgs.item(0).outerHTML});
+        console.log(Array.from(svgs)[0].outerHTML)
+        sendResponse({resp: Array.from(svgs)})
       }
-    }
+      }
+    
   );

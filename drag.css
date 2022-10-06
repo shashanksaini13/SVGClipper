@@ -1,0 +1,10 @@
+#selection {
+    position: absolute;
+    background: #e0eaf1;
+    border: 1px solid #0c65a5;
+}
+
+#selection.complete {
+    background: #E0F1E4;
+    border-color: #0CA50E;
+}
