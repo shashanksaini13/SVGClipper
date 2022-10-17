@@ -14,6 +14,6 @@
     "content_scripts": [{
       "matches": ["http://*/*", "https://*/*"],
       "css": [ "drag.css" ],
-      "js": ["cscript.js", "dragsel.js"]
+      "js": ["cscript.js"]
     }]
   }

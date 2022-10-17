@@ -52,7 +52,6 @@ canvas.addEventListener("mousemove", (e) => {
 
 canvas.addEventListener("mouseup", (e) => {
   isSelecting = false;
-
   chrome.runtime.onMessage.addListener(function (
     request,
     sender,
