@@ -44,8 +44,7 @@ Object.assign(canvas.style, {
 });
 
 body.appendChild(canvas);
-const cont = canvas.getContext("2d");
-cont.strokeStyle = "red";
+const cont = canvas.getContext("2d")
 var start = {};
 var end = {};
 var isSelecting = false;
@@ -68,6 +67,7 @@ canvas.addEventListener("mousemove", (e) => {
   var width = Math.abs(start.x - end.x);
   var height = Math.abs(start.y - end.y);
   cont.fillStyle = "rgba(254,121,104,0.5)";
+  cont.strokeStyle = "red";
   cont.strokeRect(left, top, width, height);
   cont.fillRect(left, top, width, height);
 });
@@ -94,16 +94,10 @@ canvas.addEventListener("mouseup", (e) => {
     var width = Math.abs(start.x - end.x);
     var height = Math.abs(start.y - end.y);
     if (first.x >= left && first.y >= top && first.width <= (width - first.x) && first.height <= (height - first.y)) {
-      /*ADD RECT CODE HERE*/
-      /*var rec = document.createElement("rect");
-      rec.style.width = "100px";
-      rec.style.height = "100px";
-      rec.style.left = "0px";
-      rec.style.top = "0px";
-      rec.style.fill = "green";
-      rec.style.position = "absolute";
-      var elem = document.getElementById("container");
-      elem.append(rec);*/
+      cont.strokeStyle = "green";
+      cont.fillStyle = cont.fillStyle = "rgba(104,121,104,0.5)";
+      cont.strokeRect(first.x, first.y, first.width, first.height);
+      cont.fillRect(first.x,first.y,first.width,first.height);
     }
   });
 });
