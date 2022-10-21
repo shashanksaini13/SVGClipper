@@ -20,6 +20,7 @@ Array.from(svgs, (e) => {
 console.log(svgs);
 
 const canvas = document.createElement("canvas");
+canvas.setAttribute("id", "canva")
 const body = document.body;
 const html = document.documentElement;
 let windowWidth = window.innerWidth;
@@ -88,6 +89,10 @@ canvas.addEventListener("mouseup", (e) => {
   });
   Array.from(svgs, (e) => {
     let first = e.getBoundingClientRect();
+    var left = start.x < end.x ? start.x : end.x;
+    var top = start.y < end.y ? start.y : end.y;
+    var width = Math.abs(start.x - end.x);
+    var height = Math.abs(start.y - end.y);
     if (first.x >= left && first.y >= top && first.width <= (width - first.x) && first.height <= (height - first.y)) {
       /*ADD RECT CODE HERE*/
       /*var rec = document.createElement("rect");
