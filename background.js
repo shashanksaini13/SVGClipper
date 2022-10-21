@@ -3,6 +3,7 @@ var running = false;
 
 function del() {
   console.log("del");
+  document.getElementById("canva").getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
   document.getElementById("canva").style.display = "none";
 }
 
