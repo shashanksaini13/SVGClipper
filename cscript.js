@@ -1,4 +1,3 @@
-//let svgs = Array.from(document.querySelectorAll('img[src*=".svg"]'));
 let svgs = document.querySelectorAll("svg");
 let i = 0;
 Array.from(svgs, (e) => {
