@@ -50,6 +50,7 @@ var isSelecting = false;
 
 canvas.addEventListener("mousedown", (e) => {
   isSelecting = true;
+  document.getElementById("canva").style.cursor = "crosshair";
   start.x = e.pageX;
   start.y = e.pageY;
 });
@@ -86,6 +87,7 @@ canvas.addEventListener("mouseup", (e) => {
       sendResponse({ sx: left, ex: top, sy: width, ey: height });
     }
   });
+  cont.clearRect(0, 0, windowWidth, windowHeight);
   Array.from(svgs, (e) => {
     let first = e.getBoundingClientRect();
     var left = start.x < end.x ? start.x : end.x;
@@ -99,4 +101,5 @@ canvas.addEventListener("mouseup", (e) => {
       cont.fillRect(first.x,first.y,first.width,first.height);
     }
   });
+
 });
