@@ -1,25 +1,27 @@
 var first = true;
 var running = false;
+var arr = [];
 var contextMenuItem = {
   "id": "Download SVG",
-  "title": "Download SVG",
+  "title": "Download SVGs",
   "contexts": ["all"]
 };
 chrome.contextMenus.create(contextMenuItem);
 
+console.log("test");
 function del() {
-  console.log("del");
-  document.getElementById("canva").getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+  document.getElementById("canva").getContext("2d").clearRect(0, 0, document.getElementById("canva").width, document.getElementById("canva").height);
   document.getElementById("canva").style.display = "none";
+  document.getElementById("di").innerHTML = "";
+  document.getElementById("di").remove();
 }
 
 function add() {
-  console.log("add");
   document.getElementById("canva").style.display = "block";
 }
 
 chrome.action.onClicked.addListener((tab) => {
-  if (first) {
+  if (running == false) {
     chrome.scripting.executeScript(
       {
         target: { tabId: tab.id },
@@ -27,8 +29,11 @@ chrome.action.onClicked.addListener((tab) => {
       },
       () => {}
     );
-    first = false;
     running = true;
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      function: add
+    });
     chrome.action.setIcon({path: "images/checkmark-1767564-1502468.png"}, () => { /* ... */ });
   } else if(running == true) {
     chrome.scripting.executeScript({
@@ -37,12 +42,5 @@ chrome.action.onClicked.addListener((tab) => {
     });
     running = false;
     chrome.action.setIcon({path: "images/Iconsmind-Outline-Hand-Touch-2.png"}, () => { /* ... */ });
-  } else {
-    chrome.scripting.executeScript({
-      target: { tabId: tab.id },
-      function: add
-    });
-    running = true;
-    chrome.action.setIcon({path: "images/checkmark-1767564-1502468.png"}, () => { /* ... */ });
   }
 });

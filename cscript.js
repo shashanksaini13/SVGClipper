@@ -47,10 +47,13 @@ const cont = canvas.getContext("2d")
 var start = {};
 var end = {};
 var isSelecting = false;
+var ret = [];
+
+document.getElementById("canva").style.cursor = "crosshair";
+
 
 canvas.addEventListener("mousedown", (e) => {
   isSelecting = true;
-  document.getElementById("canva").style.cursor = "crosshair";
   start.x = e.pageX;
   start.y = e.pageY;
 });
@@ -74,19 +77,6 @@ canvas.addEventListener("mousemove", (e) => {
 
 canvas.addEventListener("mouseup", (e) => {
   isSelecting = false;
-  chrome.runtime.onMessage.addListener(function (
-    request,
-    sender,
-    sendResponse
-  ) {
-    var left = start.x < end.x ? start.x : end.x;
-    var top = start.y < end.y ? start.y : end.y;
-    var width = Math.abs(start.x - end.x);
-    var height = Math.abs(start.y - end.y);
-    if (request.message == "test") {
-      sendResponse({ sx: left, ex: top, sy: width, ey: height });
-    }
-  });
   cont.clearRect(0, 0, windowWidth, windowHeight);
   Array.from(svgs, (e) => {
     let first = e.getBoundingClientRect();
@@ -94,12 +84,21 @@ canvas.addEventListener("mouseup", (e) => {
     var top = start.y < end.y ? start.y : end.y;
     var width = Math.abs(start.x - end.x);
     var height = Math.abs(start.y - end.y);
-    if (first.x >= left && first.y >= top && first.width <= (width - first.x) && first.height <= (height - first.y)) {
+    if (!(((first.x + first.width) < left) || ((left + width) < first.x) || (first.y + first.height < top) || ((top+height) < first.y))) {
       cont.strokeStyle = "green";
       cont.fillStyle = cont.fillStyle = "rgba(104,121,104,0.5)";
       cont.strokeRect(first.x, first.y, first.width, first.height);
       cont.fillRect(first.x,first.y,first.width,first.height);
+      ret.push(e);
     }
   });
-
+  document.getElementById("canva").style.display = "block";
+  const dialog = document.createElement("dialog");
+  dialog.setAttribute("id", "di");
+  console.log(ret);
+  for(var i = 0; i<ret.length; i++) {
+    dialog.innerHTML += ret[i].outerHTML;
+  }
+  document.body.appendChild(dialog);
+  dialog.showModal();
 });
