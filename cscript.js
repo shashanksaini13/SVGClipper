@@ -1,4 +1,8 @@
-let svgs = document.querySelectorAll("svg");
+let final = [];
+document.querySelectorAll('iframe').forEach((iframe)=> {
+  final = final.concat(Array.from((iframe.contentWindow.document).querySelectorAll("svg")));
+});
+let svgs = (final).concat((Array.from(document.querySelectorAll("svg"))));
 let i = 0;
 Array.from(svgs, (e) => {
   let first = e.getBoundingClientRect();
@@ -90,6 +94,9 @@ canvas.addEventListener("mouseup", (e) => {
       cont.strokeRect(first.x, first.y, first.width, first.height);
       cont.fillRect(first.x,first.y,first.width,first.height);
       ret.push(e);
+      console.log(e.id);
+      chrome.runtime.sendMessage({greeting: e.id}, function(response) {
+      });
     }
   });
   document.getElementById("canva").style.display = "block";
@@ -101,4 +108,5 @@ canvas.addEventListener("mouseup", (e) => {
   }
   document.body.appendChild(dialog);
   dialog.showModal();
+
 });

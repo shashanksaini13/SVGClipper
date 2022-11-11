@@ -3,11 +3,11 @@
     "description": "Get HTML Element",
     "version": "1.0",
     "manifest_version": 3,
+    "host_permissions": ["<all_urls>"],
     "action": {
-      //"default_popup": "popup.html",
       "default_icon": "images/Iconsmind-Outline-Hand-Touch-2.png"
     },
-    "permissions": ["activeTab", "scripting", "tabs", "contextMenus"],
+    "permissions": ["activeTab", "scripting", "tabs", "contextMenus", "downloads"],
     "background": {
       "service_worker": "background.js"
     }
