@@ -9,12 +9,13 @@ var contextMenuItem = {
 chrome.contextMenus.create(contextMenuItem);
 
 function blob(elemID) {
+  //this is null for some reason
+  let a = (Array.from(document.querySelectorAll("svg")))[0];
   console.log(document.getElementById(elemID));
-  var blob = new Blob([document.getElementById(elemID).value], { type: "image/svg+xml" });
+  //var blob = new Blob([document.getElementById(elemID).value], { type: "image/svg+xml" });
+  var blob = new Blob([a.value], { type: "image/svg+xml" });
   var url = URL.createObjectURL(blob);
-  chrome.downloads.download({
-    url: url,
-  });
+  return url;
 }
 
 function del() {
@@ -28,8 +29,8 @@ function del() {
       document.getElementById("canva").height
     );
   document.getElementById("canva").style.display = "none";
-  document.getElementById("di").innerHTML = "";
-  document.getElementById("di").remove();
+  /*document.getElementById("di").innerHTML = "";
+  document.getElementById("di").remove();*/
 }
 
 function add() {
@@ -43,7 +44,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     function: blob,
     args: [(request.greeting)], 
   },
-  () => {});
+  (injectionResults) => {
+    for (const frameResult of injectionResults){
+    chrome.downloads.download({
+      url: frameResult.result,
+    });
+  }
+  });
 });
 
 

@@ -1,7 +1,7 @@
 let final = [];
-document.querySelectorAll('iframe').forEach((iframe)=> {
+/*document.querySelectorAll('iframe').forEach((iframe)=> {
   final = final.concat(Array.from((iframe.contentWindow.document).querySelectorAll("svg")));
-});
+});*/
 let svgs = (final).concat((Array.from(document.querySelectorAll("svg"))));
 let i = 0;
 Array.from(svgs, (e) => {
@@ -18,6 +18,7 @@ Array.from(svgs, (e) => {
       "\nHeight: " +
       first.height
   );
+  console.log(document.getElementById(e.id));
   i++;
 });
 console.log(svgs);
@@ -79,7 +80,7 @@ canvas.addEventListener("mousemove", (e) => {
   cont.fillRect(left, top, width, height);
 });
 
-canvas.addEventListener("mouseup", (e) => {
+canvas.addEventListener("mouseup", (ev) => {
   isSelecting = false;
   cont.clearRect(0, 0, windowWidth, windowHeight);
   Array.from(svgs, (e) => {
@@ -94,19 +95,19 @@ canvas.addEventListener("mouseup", (e) => {
       cont.strokeRect(first.x, first.y, first.width, first.height);
       cont.fillRect(first.x,first.y,first.width,first.height);
       ret.push(e);
-      console.log(e.id);
+      console.log(document.getElementById(e.id));
       chrome.runtime.sendMessage({greeting: e.id}, function(response) {
       });
     }
   });
   document.getElementById("canva").style.display = "block";
-  const dialog = document.createElement("dialog");
+  /*const dialog = document.createElement("dialog");
   dialog.setAttribute("id", "di");
   console.log(ret);
   for(var i = 0; i<ret.length; i++) {
     dialog.innerHTML += ret[i].outerHTML;
   }
   document.body.appendChild(dialog);
-  dialog.showModal();
+  dialog.showModal();*/
 
 });
