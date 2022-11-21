@@ -3,6 +3,7 @@ let final = [];
   final = final.concat(Array.from((iframe.contentWindow.document).querySelectorAll("svg")));
 });*/
 let svgs = (final).concat((Array.from(document.querySelectorAll("svg"))));
+let svgIDs = [];
 let i = 0;
 Array.from(svgs, (e) => {
   let first = e.getBoundingClientRect();
@@ -18,9 +19,11 @@ Array.from(svgs, (e) => {
       "\nHeight: " +
       first.height
   );
-  console.log(document.getElementById(e.id));
+  e.setAttribute("id", "SVG " + i);
+  svgIDs.push(e.id);
   i++;
 });
+console.log(svgIDs);
 console.log(svgs);
 
 const canvas = document.createElement("canvas");

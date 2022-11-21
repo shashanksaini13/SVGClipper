@@ -9,11 +9,8 @@ var contextMenuItem = {
 chrome.contextMenus.create(contextMenuItem);
 
 function blob(elemID) {
-  //this is null for some reason
-  let a = (Array.from(document.querySelectorAll("svg")))[0];
-  console.log(document.getElementById(elemID));
-  //var blob = new Blob([document.getElementById(elemID).value], { type: "image/svg+xml" });
-  var blob = new Blob([a.value], { type: "image/svg+xml" });
+  let a = document.getElementById(elemID);
+  var blob = new Blob([a.outerHTML], { type: "image/svg+xml" });
   var url = URL.createObjectURL(blob);
   return url;
 }
