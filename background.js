@@ -26,8 +26,6 @@ function del() {
       document.getElementById("canva").height
     );
   document.getElementById("canva").style.display = "none";
-  /*document.getElementById("di").innerHTML = "";
-  document.getElementById("di").remove();*/
 }
 
 function add() {
@@ -49,7 +47,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
   });
 });
-
 
 chrome.action.onClicked.addListener((tab) => {
 
@@ -86,3 +83,29 @@ chrome.action.onClicked.addListener((tab) => {
     );
   }
 });
+
+function changeIcon() {
+  chrome.tabs.query({active: true}, function(tab){
+    chrome.action.setIcon(
+      { path: "images/Iconsmind-Outline-Hand-Touch-2.png" },
+      () => {
+        /* ... */
+      }
+    );
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      function: del,
+    });
+  });
+  running = false;
+}
+
+//listen for new tab to be activated
+chrome.tabs.onActivated.addListener(function(activeInfo) {
+  changeIcon();
+});
+
+//listen for current tab to be changed
+/*chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+  changeIcon();
+});*/
