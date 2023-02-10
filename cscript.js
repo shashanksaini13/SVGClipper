@@ -2,9 +2,17 @@ let final = [];
 /*document.querySelectorAll('iframe').forEach( item =>
   console.log(item.contentWindow.document.body.querySelectorAll('svg'));
 )*/
-document.querySelectorAll('iframe').forEach((iframe)=> {
+frames = document.querySelectorAll('iframe');
+if(frames.length > 0) {
+  var url = frames[0].src;
+  var tab = window.open(url, '_blank');
+  tab.focus();
+}
+
+/*document.querySelectorAll('iframe').forEach((iframe)=> {
   final = final.concat(Array.from((iframe.contentWindow.document).querySelectorAll("svg")));
-});
+});*/
+
 let svgs = (final).concat((Array.from(document.querySelectorAll("svg"))));
 let svgIDs = [];
 let i = 0;

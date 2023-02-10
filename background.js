@@ -1,12 +1,6 @@
 var first = true;
 var running = false;
 var arr = [];
-var contextMenuItem = {
-  id: "Download SVG",
-  title: "Download SVGs",
-  contexts: ["all"],
-};
-chrome.contextMenus.create(contextMenuItem);
 
 function blob(elemID) {
   let a = document.getElementById(elemID);
@@ -35,7 +29,7 @@ function add() {
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log(request.greeting);
   chrome.scripting.executeScript({
-    target: { tabId: sender.tab.id },
+    target: { tabId: sender.tab.id, allFrames : true },
     function: blob,
     args: [(request.greeting)], 
   },
@@ -53,14 +47,14 @@ chrome.action.onClicked.addListener((tab) => {
   if (running == false) {
     chrome.scripting.executeScript(
       {
-        target: { tabId: tab.id },
+        target: { tabId: tab.id, allFrames : true },
         files: ["cscript.js"],
       },
       () => {}
     );
     running = true;
     chrome.scripting.executeScript({
-      target: { tabId: tab.id },
+      target: { tabId: tab.id, allFrames : true },
       function: add,
     });
     chrome.action.setIcon(
@@ -71,7 +65,7 @@ chrome.action.onClicked.addListener((tab) => {
     );
   } else if (running == true) {
     chrome.scripting.executeScript({
-      target: { tabId: tab.id },
+      target: { tabId: tab.id, allFrames : true },
       function: del,
     });
     running = false;
@@ -93,7 +87,7 @@ function changeIcon() {
       }
     );
     chrome.scripting.executeScript({
-      target: { tabId: tab.id },
+      target: { tabId: tab.id, allFrames : true },
       function: del,
     });
   });
