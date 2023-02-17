@@ -4,6 +4,13 @@ var arr = [];
 
 function blob(elemID) {
   let a = document.getElementById(elemID);
+  if (a == null) {
+    document.querySelectorAll('iframe').forEach((iframe)=> {
+      if(a == null) {
+        a = iframe.contentWindow.document.getElementById(elemID);
+      }
+    });
+  }
   var blob = new Blob([a.outerHTML], { type: "image/svg+xml" });
   var url = URL.createObjectURL(blob);
   return url;
@@ -29,7 +36,7 @@ function add() {
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log(request.greeting);
   chrome.scripting.executeScript({
-    target: { tabId: sender.tab.id, allFrames : true },
+    target: { tabId: sender.tab.id },
     function: blob,
     args: [(request.greeting)], 
   },

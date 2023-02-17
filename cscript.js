@@ -1,19 +1,26 @@
 let final = [];
+let temp = [];
 /*document.querySelectorAll('iframe').forEach( item =>
   console.log(item.contentWindow.document.body.querySelectorAll('svg'));
 )*/
-frames = document.querySelectorAll('iframe');
-if(frames.length > 0) {
+
+/*if(frames.length > 0) {
   var url = frames[0].src;
   var tab = window.open(url, '_blank');
   tab.focus();
-}
+}*/
+let frames = new Map()
+document.querySelectorAll('iframe').forEach((iframe)=> {
+  temp = Array.from((iframe.contentWindow.document).querySelectorAll("svg"));
+  Array.from (temp, (e) => {
+    frames.set(e, iframe);
+  });
+  final = final.concat(temp);
+});
 
-/*document.querySelectorAll('iframe').forEach((iframe)=> {
-  final = final.concat(Array.from((iframe.contentWindow.document).querySelectorAll("svg")));
-});*/
+console.log(final);
 
-let svgs = (final).concat((Array.from(document.querySelectorAll("svg"))));
+let svgs = ((Array.from(document.querySelectorAll("svg"))));
 let svgIDs = [];
 let i = 0;
 Array.from(svgs, (e) => {
@@ -66,7 +73,6 @@ const cont = canvas.getContext("2d")
 var start = {};
 var end = {};
 var isSelecting = false;
-var ret = [];
 
 document.getElementById("canva").style.cursor = "crosshair";
 
@@ -94,9 +100,44 @@ canvas.addEventListener("mousemove", (e) => {
   cont.fillRect(left, top, width, height);
 });
 
+
+function getOffset(element)
+{
+    var bound = element.getBoundingClientRect();
+    var html = document.documentElement;
+
+    return {
+        top: bound.top + window.pageYOffset - html.clientTop,
+        left: bound.left + window.pageXOffset - html.clientLeft
+    };
+}
+
+function wrap(el, wrapper) {
+  el.parentNode.insertBefore(wrapper, el);
+  wrapper.appendChild(el);
+  return wrapper;
+}
+
 canvas.addEventListener("mouseup", (ev) => {
   isSelecting = false;
   cont.clearRect(0, 0, windowWidth, windowHeight);
+  Array.from(final, (e) => {
+    let first = frames.get(e).getBoundingClientRect();
+    if (e.getAttribute("width") != "0" && e.getAttribute("height") != "0") {
+      var left = start.x < end.x ? start.x : end.x;
+      var top = start.y < end.y ? start.y : end.y;
+      var width = Math.abs(start.x - end.x);
+      var height = Math.abs(start.y - end.y);
+      if (!(((first.x + first.width) < left) || ((left + width) < first.x) || (first.y + first.height < top) || ((top+height) < first.y))) {
+        cont.strokeStyle = "green";
+        cont.fillStyle = cont.fillStyle = "rgba(104,121,104,0.5)";
+        cont.strokeRect(first.x, first.y, first.width, first.height);
+        cont.fillRect(first.x,first.y,first.width,first.height);
+        chrome.runtime.sendMessage({greeting: e.id}, function(response) {
+        });
+      }
+    }
+  });
   Array.from(svgs, (e) => {
     let first = e.getBoundingClientRect();
     var left = start.x < end.x ? start.x : end.x;
@@ -108,20 +149,9 @@ canvas.addEventListener("mouseup", (ev) => {
       cont.fillStyle = cont.fillStyle = "rgba(104,121,104,0.5)";
       cont.strokeRect(first.x, first.y, first.width, first.height);
       cont.fillRect(first.x,first.y,first.width,first.height);
-      ret.push(e);
-      console.log(document.getElementById(e.id));
       chrome.runtime.sendMessage({greeting: e.id}, function(response) {
       });
     }
   });
   document.getElementById("canva").style.display = "block";
-  /*const dialog = document.createElement("dialog");
-  dialog.setAttribute("id", "di");
-  console.log(ret);
-  for(var i = 0; i<ret.length; i++) {
-    dialog.innerHTML += ret[i].outerHTML;
-  }
-  document.body.appendChild(dialog);
-  dialog.showModal();*/
-
 });
