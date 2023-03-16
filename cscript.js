@@ -38,7 +38,8 @@ Array.from(svgs, (e) => {
       "\nHeight: " +
       first.height
   );
-  e.setAttribute("id", "SVG " + i);
+  if(e.id == "")
+    e.setAttribute("id", "SVG " + i);
   svgIDs.push(e.id);
   i++;
 });
@@ -76,7 +77,6 @@ var end = {};
 var isSelecting = false;
 
 document.getElementById("canva").style.cursor = "crosshair";
-
 
 canvas.addEventListener("mousedown", (e) => {
   isSelecting = true;
