@@ -9,6 +9,7 @@ let temp = [];
   var tab = window.open(url, '_blank');
   tab.focus();
 }*/
+
 let frames = new Map()
 document.querySelectorAll('iframe').forEach((iframe)=> {
   temp = Array.from((iframe.contentWindow.document).querySelectorAll("svg"));
@@ -99,7 +100,6 @@ canvas.addEventListener("mousemove", (e) => {
   cont.strokeRect(left, top, width, height);
   cont.fillRect(left, top, width, height);
 });
-
 
 function getOffset(element)
 {
