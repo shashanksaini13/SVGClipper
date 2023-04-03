@@ -11,13 +11,17 @@ let temp = [];
 }*/
 
 let frames = new Map()
-document.querySelectorAll('iframe').forEach((iframe)=> {
-  temp = Array.from((iframe.contentWindow.document).querySelectorAll("svg"));
-  Array.from (temp, (e) => {
-    frames.set(e, iframe);
-  });
-  final = final.concat(temp);
+try{
+  document.querySelectorAll('iframe').forEach((iframe)=> {
+    temp = Array.from((iframe.contentWindow.document).querySelectorAll("svg"));
+    Array.from (temp, (e) => {
+      frames.set(e, iframe);
+    });
+    final = final.concat(temp);
 });
+} catch(err) {
+  
+}
 
 console.log(final);
 
@@ -40,6 +44,8 @@ Array.from(svgs, (e) => {
   );
   if(e.id == "")
     e.setAttribute("id", "SVG " + i);
+  e.setAttribute("xmlns", "http://www.w3.org/2000/svg")
+  e.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink")
   svgIDs.push(e.id);
   i++;
 });
@@ -145,10 +151,11 @@ canvas.addEventListener("mouseup", (ev) => {
     var width = Math.abs(start.x - end.x);
     var height = Math.abs(start.y - end.y);
     if (!(((first.x + first.width) < left) || ((left + width) < first.x) || (first.y + first.height < top) || ((top+height) < first.y))) {
-      cont.strokeStyle = "green";
+      /*cont.strokeStyle = "green";
       cont.fillStyle = cont.fillStyle = "rgba(104,121,104,0.5)";
       cont.strokeRect(first.x, first.y, first.width, first.height);
       cont.fillRect(first.x,first.y,first.width,first.height);
+      */
       chrome.runtime.sendMessage({greeting: e.id}, function(response) {
       });
     }
