@@ -125,6 +125,7 @@ function wrap(el, wrapper) {
 }
 
 canvas.addEventListener("mouseup", (ev) => {
+  count = 0;
   isSelecting = false;
   cont.clearRect(0, 0, windowWidth, windowHeight);
   Array.from(final, (e) => {
@@ -135,10 +136,11 @@ canvas.addEventListener("mouseup", (ev) => {
       var width = Math.abs(start.x - end.x);
       var height = Math.abs(start.y - end.y);
       if (!(((first.x + first.width) < left) || ((left + width) < first.x) || (first.y + first.height < top) || ((top+height) < first.y))) {
-        cont.strokeStyle = "green";
+        /*cont.strokeStyle = "green";
         cont.fillStyle = cont.fillStyle = "rgba(104,121,104,0.5)";
         cont.strokeRect(first.x, first.y, first.width, first.height);
-        cont.fillRect(first.x,first.y,first.width,first.height);
+        cont.fillRect(first.x,first.y,first.width,first.height);*/
+        count++;
         chrome.runtime.sendMessage({greeting: e.id}, function(response) {
         });
       }
@@ -156,9 +158,58 @@ canvas.addEventListener("mouseup", (ev) => {
       cont.strokeRect(first.x, first.y, first.width, first.height);
       cont.fillRect(first.x,first.y,first.width,first.height);
       */
+      count++;
       chrome.runtime.sendMessage({greeting: e.id}, function(response) {
       });
     }
   });
+  if(count==0) {
+    createPopup();
+  }
   document.getElementById("canva").style.display = "block";
 });
+function createPopup() {
+  // Create a div element to hold the popup content
+  const popupDiv = document.createElement('div');
+  popupDiv.style.position = 'fixed';
+  popupDiv.style.top = '50%';
+  popupDiv.style.left = '50%';
+  popupDiv.style.transform = 'translate(-50%, -50%)';
+  popupDiv.style.background = 'red';
+  popupDiv.style.padding = '30px';
+  popupDiv.style.borderRadius = '10px';
+  popupDiv.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.2)';
+  popupDiv.style.zIndex = '9999';
+  popupDiv.style.fontFamily = 'Roboto, sans-serif';
+
+  // Create a paragraph element for the popup message
+  const popupMessage = document.createElement('p');
+  popupMessage.style.fontSize = '20px';
+  popupMessage.style.margin = '0';
+  popupMessage.style.textAlign = 'center';
+  popupMessage.style.color = '#fff';
+  popupMessage.innerText = 'No SVGs found in selected region!';
+
+  // Create a button element to close the popup
+  const closeButton = document.createElement('button');
+  closeButton.style.display = 'block';
+  closeButton.style.margin = '20px auto 0';
+  closeButton.style.background = '#fff';
+  closeButton.style.border = 'none';
+  closeButton.style.borderRadius = '5px';
+  closeButton.style.padding = '12px 24px';
+  closeButton.style.fontSize = '20px';
+  closeButton.style.color = 'red';
+  closeButton.style.cursor = 'pointer';
+  closeButton.innerText = 'Close';
+  closeButton.onclick = function() {
+    popupDiv.remove();
+  };
+
+  // Add the popup content elements to the popup div
+  popupDiv.appendChild(popupMessage);
+  popupDiv.appendChild(closeButton);
+
+  // Add the popup div to the document body
+  document.body.appendChild(popupDiv);
+}
