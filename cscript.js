@@ -1,15 +1,5 @@
-let final = [];
+let f = [];
 let temp = [];
-/*document.querySelectorAll('iframe').forEach( item =>
-  console.log(item.contentWindow.document.body.querySelectorAll('svg'));
-)*/
-
-/*if(frames.length > 0) {
-  var url = frames[0].src;
-  var tab = window.open(url, '_blank');
-  tab.focus();
-}*/
-
 let frames = new Map()
 try{
   document.querySelectorAll('iframe').forEach((iframe)=> {
@@ -17,13 +7,12 @@ try{
     Array.from (temp, (e) => {
       frames.set(e, iframe);
     });
-    final = final.concat(temp);
+    f = f.concat(temp);
 });
 } catch(err) {
-  
+
 }
 
-console.log(final);
 
 let svgs = ((Array.from(document.querySelectorAll("svg"))));
 let svgIDs = [];
@@ -128,7 +117,7 @@ canvas.addEventListener("mouseup", (ev) => {
   count = 0;
   isSelecting = false;
   cont.clearRect(0, 0, windowWidth, windowHeight);
-  Array.from(final, (e) => {
+  Array.from(f, (e) => {
     let first = frames.get(e).getBoundingClientRect();
     if (e.getAttribute("width") != "0" && e.getAttribute("height") != "0") {
       var left = start.x < end.x ? start.x : end.x;
@@ -164,11 +153,13 @@ canvas.addEventListener("mouseup", (ev) => {
     }
   });
   if(count==0) {
-    createPopup();
+    chrome.runtime.sendMessage({greeting: "NoSVG"}, function(response) {
+    });
   }
-  document.getElementById("canva").style.display = "block";
+  document.getElementById("canva").style.display = "none";
 });
-function createPopup() {
+
+function createPopup(message) {
   // Create a div element to hold the popup content
   const popupDiv = document.createElement('div');
   popupDiv.style.position = 'fixed';
@@ -188,7 +179,7 @@ function createPopup() {
   popupMessage.style.margin = '0';
   popupMessage.style.textAlign = 'center';
   popupMessage.style.color = '#fff';
-  popupMessage.innerText = 'No SVGs found in selected region!';
+  popupMessage.innerText = message;
 
   // Create a button element to close the popup
   const closeButton = document.createElement('button');
@@ -212,4 +203,5 @@ function createPopup() {
 
   // Add the popup div to the document body
   document.body.appendChild(popupDiv);
+  chrome.runtime.sendMessage({greeting: "temp"}, function(response) {});
 }
