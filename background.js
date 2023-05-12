@@ -3,20 +3,20 @@ var running = false;
 var arr = [];
 
 function blob(elemID) {
-  try{
-  let a = document.getElementById(elemID);
-  if (a == null) {
-    document.querySelectorAll('iframe').forEach((iframe)=> {
-      if(a == null) {
-        a = iframe.contentWindow.document.getElementById(elemID);
-      }
-    });
+  try {
+    let a = document.getElementById(elemID);
+    if (a == null) {
+      document.querySelectorAll('iframe').forEach((iframe) => {
+        if (a == null) {
+          a = iframe.contentWindow.document.getElementById(elemID);
+        }
+      });
+    }
+    var blob = new Blob([a.outerHTML], { type: "image/svg+xml" });
+    var url = URL.createObjectURL(blob);
+    return url;
   }
-  var blob = new Blob([a.outerHTML], { type: "image/svg+xml" });
-  var url = URL.createObjectURL(blob);
-  return url;
-  }
-  catch(err){
+  catch (err) {
     createPopup("Cannot download from cross origin iFrame!");
   }
 }
@@ -55,7 +55,7 @@ function createPopup(message) {
   closeButton.style.color = 'red';
   closeButton.style.cursor = 'pointer';
   closeButton.innerText = 'Close';
-  closeButton.onclick = function() {
+  closeButton.onclick = function () {
     popupDiv.remove();
   };
 
@@ -85,27 +85,27 @@ function add() {
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if(request.greeting != "temp") {
-  if(request.greeting == "NoSVG") {
-    chrome.scripting.executeScript({
-      target: {tabId: sender.tab.id},
-      function: createPopup,
-      args: [("No SVGs found in selected region!")],
-    })
-  } else {
-  chrome.scripting.executeScript({
-    target: { tabId: sender.tab.id },
-    function: blob,
-    args: [(request.greeting)], 
-  },
-  (injectionResults) => {
-    for (const frameResult of injectionResults){
-    chrome.downloads.download({
-      url: frameResult.result,
-    });
-  }
-  });
-}
+  if (request.greeting != "temp") {
+    if (request.greeting == "NoSVG") {
+      chrome.scripting.executeScript({
+        target: { tabId: sender.tab.id },
+        function: createPopup,
+        args: [("No SVGs found in selected region!")],
+      })
+    } else {
+      chrome.scripting.executeScript({
+        target: { tabId: sender.tab.id },
+        function: blob,
+        args: [(request.greeting)],
+      },
+        (injectionResults) => {
+          for (const frameResult of injectionResults) {
+            chrome.downloads.download({
+              url: frameResult.result,
+            });
+          }
+        });
+    }
   }
   running = false;
   changeIcon();
@@ -116,14 +116,14 @@ chrome.action.onClicked.addListener((tab) => {
   if (running == false) {
     chrome.scripting.executeScript(
       {
-        target: { tabId: tab.id, allFrames : true },
+        target: { tabId: tab.id, allFrames: true },
         files: ["cscript.js"],
       },
-      () => {}
+      () => { }
     );
     running = true;
     chrome.scripting.executeScript({
-      target: { tabId: tab.id, allFrames : true },
+      target: { tabId: tab.id, allFrames: true },
       function: add,
     });
     chrome.action.setIcon(
@@ -134,7 +134,7 @@ chrome.action.onClicked.addListener((tab) => {
     );
   } else if (running == true) {
     chrome.scripting.executeScript({
-      target: { tabId: tab.id, allFrames : true },
+      target: { tabId: tab.id, allFrames: true },
       function: del,
     });
     running = false;
@@ -148,7 +148,7 @@ chrome.action.onClicked.addListener((tab) => {
 });
 
 function changeIcon() {
-  chrome.tabs.query({active: true}, function(tab){
+  chrome.tabs.query({ active: true }, function (tab) {
     chrome.action.setIcon(
       { path: "images/Iconsmind-Outline-Hand-Touch-2.png" },
       () => {
@@ -156,7 +156,7 @@ function changeIcon() {
       }
     );
     chrome.scripting.executeScript({
-      target: { tabId: tab.id, allFrames : true },
+      target: { tabId: tab.id, allFrames: true },
       function: del,
     });
   });
@@ -164,11 +164,6 @@ function changeIcon() {
 }
 
 //listen for new tab to be activated
-chrome.tabs.onActivated.addListener(function(activeInfo) {
+chrome.tabs.onActivated.addListener(function (activeInfo) {
   changeIcon();
 });
-
-//listen for current tab to be changed
-/*chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-  changeIcon();
-});*/

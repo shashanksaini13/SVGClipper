@@ -1,15 +1,15 @@
 let f = [];
 let temp = [];
 let frames = new Map()
-try{
-  document.querySelectorAll('iframe').forEach((iframe)=> {
+try {
+  document.querySelectorAll('iframe').forEach((iframe) => {
     temp = Array.from((iframe.contentWindow.document).querySelectorAll("svg"));
-    Array.from (temp, (e) => {
+    Array.from(temp, (e) => {
       frames.set(e, iframe);
     });
     f = f.concat(temp);
-});
-} catch(err) {
+  });
+} catch (err) {
 
 }
 
@@ -21,17 +21,17 @@ Array.from(svgs, (e) => {
   let first = e.getBoundingClientRect();
   console.log(
     "SVG #" +
-      i +
-      "\nX: " +
-      first.x +
-      "\nY: " +
-      first.y +
-      "\nWidth: " +
-      first.width +
-      "\nHeight: " +
-      first.height
+    i +
+    "\nX: " +
+    first.x +
+    "\nY: " +
+    first.y +
+    "\nWidth: " +
+    first.width +
+    "\nHeight: " +
+    first.height
   );
-  if(e.id == "")
+  if (e.id == "")
     e.setAttribute("id", "SVG " + i);
   e.setAttribute("xmlns", "http://www.w3.org/2000/svg")
   e.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink")
@@ -96,15 +96,14 @@ canvas.addEventListener("mousemove", (e) => {
   cont.fillRect(left, top, width, height);
 });
 
-function getOffset(element)
-{
-    var bound = element.getBoundingClientRect();
-    var html = document.documentElement;
+function getOffset(element) {
+  var bound = element.getBoundingClientRect();
+  var html = document.documentElement;
 
-    return {
-        top: bound.top + window.pageYOffset - html.clientTop,
-        left: bound.left + window.pageXOffset - html.clientLeft
-    };
+  return {
+    top: bound.top + window.pageYOffset - html.clientTop,
+    left: bound.left + window.pageXOffset - html.clientLeft
+  };
 }
 
 function wrap(el, wrapper) {
@@ -124,13 +123,9 @@ canvas.addEventListener("mouseup", (ev) => {
       var top = start.y < end.y ? start.y : end.y;
       var width = Math.abs(start.x - end.x);
       var height = Math.abs(start.y - end.y);
-      if (!(((first.x + first.width) < left) || ((left + width) < first.x) || (first.y + first.height < top) || ((top+height) < first.y))) {
-        /*cont.strokeStyle = "green";
-        cont.fillStyle = cont.fillStyle = "rgba(104,121,104,0.5)";
-        cont.strokeRect(first.x, first.y, first.width, first.height);
-        cont.fillRect(first.x,first.y,first.width,first.height);*/
+      if (!(((first.x + first.width) < left) || ((left + width) < first.x) || (first.y + first.height < top) || ((top + height) < first.y))) {
         count++;
-        chrome.runtime.sendMessage({greeting: e.id}, function(response) {
+        chrome.runtime.sendMessage({ greeting: e.id }, function (response) {
         });
       }
     }
@@ -141,67 +136,16 @@ canvas.addEventListener("mouseup", (ev) => {
     var top = start.y < end.y ? start.y : end.y;
     var width = Math.abs(start.x - end.x);
     var height = Math.abs(start.y - end.y);
-    if (!(((first.x + first.width) < left) || ((left + width) < first.x) || (first.y + first.height < top) || ((top+height) < first.y))) {
-      /*cont.strokeStyle = "green";
-      cont.fillStyle = cont.fillStyle = "rgba(104,121,104,0.5)";
-      cont.strokeRect(first.x, first.y, first.width, first.height);
-      cont.fillRect(first.x,first.y,first.width,first.height);
-      */
+    if (!(((first.x + first.width) < left) || ((left + width) < first.x) || (first.y + first.height < top) || ((top + height) < first.y))) {
       count++;
-      chrome.runtime.sendMessage({greeting: e.id}, function(response) {
+      chrome.runtime.sendMessage({ greeting: e.id }, function (response) {
       });
     }
   });
-  if(count==0) {
-    chrome.runtime.sendMessage({greeting: "NoSVG"}, function(response) {
+  if (count == 0) {
+    chrome.runtime.sendMessage({ greeting: "NoSVG" }, function (response) {
     });
   }
   document.getElementById("canva").style.display = "none";
 });
 
-function createPopup(message) {
-  // Create a div element to hold the popup content
-  const popupDiv = document.createElement('div');
-  popupDiv.style.position = 'fixed';
-  popupDiv.style.top = '50%';
-  popupDiv.style.left = '50%';
-  popupDiv.style.transform = 'translate(-50%, -50%)';
-  popupDiv.style.background = 'red';
-  popupDiv.style.padding = '30px';
-  popupDiv.style.borderRadius = '10px';
-  popupDiv.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.2)';
-  popupDiv.style.zIndex = '9999';
-  popupDiv.style.fontFamily = 'Roboto, sans-serif';
-
-  // Create a paragraph element for the popup message
-  const popupMessage = document.createElement('p');
-  popupMessage.style.fontSize = '20px';
-  popupMessage.style.margin = '0';
-  popupMessage.style.textAlign = 'center';
-  popupMessage.style.color = '#fff';
-  popupMessage.innerText = message;
-
-  // Create a button element to close the popup
-  const closeButton = document.createElement('button');
-  closeButton.style.display = 'block';
-  closeButton.style.margin = '20px auto 0';
-  closeButton.style.background = '#fff';
-  closeButton.style.border = 'none';
-  closeButton.style.borderRadius = '5px';
-  closeButton.style.padding = '12px 24px';
-  closeButton.style.fontSize = '20px';
-  closeButton.style.color = 'red';
-  closeButton.style.cursor = 'pointer';
-  closeButton.innerText = 'Close';
-  closeButton.onclick = function() {
-    popupDiv.remove();
-  };
-
-  // Add the popup content elements to the popup div
-  popupDiv.appendChild(popupMessage);
-  popupDiv.appendChild(closeButton);
-
-  // Add the popup div to the document body
-  document.body.appendChild(popupDiv);
-  chrome.runtime.sendMessage({greeting: "temp"}, function(response) {});
-}
