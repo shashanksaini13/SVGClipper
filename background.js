@@ -87,7 +87,11 @@ function add() {
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if(request.greeting != "temp") {
   if(request.greeting == "NoSVG") {
-    createPopup("No SVGs found in selected region!");
+    chrome.scripting.executeScript({
+      target: {tabId: sender.tab.id},
+      function: createPopup,
+      args: [("No SVGs found in selected region!")],
+    })
   } else {
   chrome.scripting.executeScript({
     target: { tabId: sender.tab.id },
