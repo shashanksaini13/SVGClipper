@@ -1,1 +1,2 @@
 # SVGClipper
+Under Chrome settings -> manage extensions. Switch to developer mode on the top right. Click "load unpacked" and load in the cloned git repository. Then you'll be able to use the extension on any webpage.
